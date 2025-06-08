@@ -45,3 +45,8 @@ button {
   border-radius: 4px;
   cursor: pointer;
 }
+
+button.danger {
+  background: #da3633;
+  margin-top: 5px;
+}
