@@ -16,7 +16,7 @@ import {
   remove
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-const testerUsers = ["Wenda", "ForeverGray_:D", "ForeverSkye_:D"];
+const testerUsers = ["ForeverGray_:D", "ForeverSkye_:D", "Rebecca!🐾🦴"];
 
 // 🚨 REPLACE WITH YOUR FIREBASE CONFIG!
 const firebaseConfig = {
