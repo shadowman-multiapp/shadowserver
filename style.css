@@ -1,15 +1,16 @@
 body {
-  background: #0d1117;
-  color: #c9d1d9;
-  font-family: sans-serif;
+  background: linear-gradient(#4c0000, black, black);
+  color: red;
+  font-family: 'paint', Arial, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
 .chat-box {
-  background: #161b22;
+  background: rgba(0, 0, 0, 0);
   padding: 20px;
+  border: 2px soild red;
   border-radius: 8px;
   width: 350px;
 }
@@ -23,7 +24,7 @@ select, input, button {
 .messages {
   height: 200px;
   overflow-y: scroll;
-  border: 1px solid #30363d;
+  border: 2px solid red;
   padding: 10px;
   margin: 10px 0;
 }
