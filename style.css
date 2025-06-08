@@ -1,7 +1,7 @@
 @font-face {
     font-family: 'paint';
-    src: url('/paint.woff2') format('woff2'),
-         url('/paint.woff') format('woff');
+    src: url('paint.woff2') format('woff2'),
+         url('paint.woff') format('woff');
     font-weight: 500;
     font-style: normal;
     font-display: swap;
