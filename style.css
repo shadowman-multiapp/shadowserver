@@ -11,21 +11,21 @@ body {
   background: #161b22;
   padding: 20px;
   border-radius: 8px;
-  width: 320px;
+  width: 350px;
+}
+select, input, button {
+  width: 100%;
+  margin-top: 5px;
+  padding: 8px;
+  border-radius: 4px;
+  border: none;
 }
 .messages {
   height: 200px;
   overflow-y: scroll;
   border: 1px solid #30363d;
   padding: 10px;
-  margin-bottom: 10px;
-}
-input, button {
-  width: 100%;
-  margin-top: 5px;
-  padding: 8px;
-  border-radius: 4px;
-  border: none;
+  margin: 10px 0;
 }
 .danger {
   background: #da3633;
