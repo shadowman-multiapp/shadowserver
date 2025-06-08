@@ -1,7 +1,13 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import {
+  getDatabase,
+  ref,
+  push,
+  onChildAdded,
+  remove
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-// 🔧 YOUR FIREBASE CONFIG HERE
+// 🚨 REPLACE WITH YOUR FIREBASE CONFIG!
 const firebaseConfig = {
   apiKey: "AIzaSyAEXb38Ot27LILYnzgvAigufQqSKAtki4c",
   authDomain: "shadowman-23898.firebaseapp.com",
@@ -14,24 +20,36 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const messagesRef = ref(db, "messages");
 
+// 🧠 Elements
 const usernameInput = document.getElementById("username");
 const messageInput = document.getElementById("message");
 const messagesDiv = document.getElementById("messages");
+const roomSelector = document.getElementById("roomSelector");
 
-// 🔓 Enable typing only if name exists
+let currentRoom = roomSelector.value;
+let roomRef = ref(db, `rooms/${currentRoom}`);
+let unsubscribe = null;
+
+// Enable/disable input
 usernameInput.addEventListener("input", () => {
   messageInput.disabled = !usernameInput.value.trim();
 });
 
-// 💌 Send message
+// 🔄 Handle room switch
+roomSelector.addEventListener("change", () => {
+  currentRoom = roomSelector.value;
+  roomRef = ref(db, `rooms/${currentRoom}`);
+  loadMessages();
+});
+
+// 💬 Send a message
 window.sendMessage = () => {
   const name = usernameInput.value.trim();
   const text = messageInput.value.trim();
   if (!name || !text) return;
 
-  push(messagesRef, {
+  push(roomRef, {
     name,
     text,
     time: new Date().toISOString()
@@ -39,20 +57,29 @@ window.sendMessage = () => {
   messageInput.value = "";
 };
 
-// 📡 Live message updates
-onChildAdded(messagesRef, (data) => {
-  const msg = data.val();
-  const msgElem = document.createElement("div");
-  msgElem.innerHTML = `<b>${msg.name}</b>: ${msg.text}`;
-  messagesDiv.appendChild(msgElem);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
-});
-
-// 🧨 Nuke it
+// 🧨 Clear chat in current room
 window.clearMessages = () => {
-  if (confirm("Nuke the entire chatroom? 💣")) {
-    remove(messagesRef).then(() => {
+  if (confirm("Clear all messages in this channel?")) {
+    remove(roomRef).then(() => {
       messagesDiv.innerHTML = "";
     });
   }
 };
+
+// 📡 Load messages in current room
+function loadMessages() {
+  messagesDiv.innerHTML = "";
+
+  if (unsubscribe) unsubscribe(); // detach old listener
+
+  unsubscribe = onChildAdded(roomRef, (data) => {
+    const msg = data.val();
+    const msgElem = document.createElement("div");
+    msgElem.innerHTML = `<b>${msg.name}</b>: ${msg.text}`;
+    messagesDiv.appendChild(msgElem);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  });
+}
+
+// 🔃 Initial load
+loadMessages();
