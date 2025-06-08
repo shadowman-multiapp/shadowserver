@@ -1,6 +1,15 @@
+@font-face {
+    font-family: 'paint';
+    src: url('/paint.woff2') format('woff2'),
+         url('/paint.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
 body {
-  background: #0d1117;
-  color: #c9d1d9;
+  background: linear-gradient(#4c0000, black, black);
+  color: red;
   font-family: sans-serif;
   display: flex;
   justify-content: center;
@@ -8,7 +17,8 @@ body {
   height: 100vh;
 }
 .chat-box {
-  background: #161b22;
+  background: linear-gradient(#4c0000, black, black);
+  border: 2px solid red;
   padding: 20px;
   border-radius: 8px;
   width: 350px;
@@ -19,15 +29,27 @@ select, input, button {
   padding: 8px;
   border-radius: 4px;
   border: none;
+  background: #4c0000;
 }
 .messages {
   height: 200px;
   overflow-y: scroll;
-  border: 1px solid #30363d;
+  border: 1px solid red;
   padding: 10px;
   margin: 10px 0;
 }
 .danger {
-  background: #da3633;
-  color: white;
+  background: black;
+  color: red;
+}
+
+.danger:hover {
+    background: #4c0000;
+    color: red;
+    cursor: pointer;
+}
+
+.send:hover {
+    background: darkred;
+    color: black;
 }
