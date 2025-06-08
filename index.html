@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>ChatRoom Real</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="chat-box">
-      <div id="messages" class="messages"></div>
-      <input id="username" placeholder="Your name..." />
-      <input id="message" placeholder="Type a message..." disabled />
-      <button onclick="sendMessage()">Send</button>
-      <button onclick="clearMessages()" class="danger">🧨 Clear Chat</button>
-    </div>
-    <script type="module" src="script.js"></script>
-  </body>
+<head>
+  <title>Mini Discord</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="chat-box">
+    <h2>💬 Mini Discord</h2>
+    <select id="roomSelector">
+      <option value="general">#general</option>
+      <option value="memes">#memes</option>
+      <option value="gaming">#gaming</option>
+    </select>
+    <div id="messages" class="messages"></div>
+    <input id="username" placeholder="Your name..." />
+    <input id="message" placeholder="Type a message..." disabled />
+    <button onclick="sendMessage()">Send</button>
+    <button onclick="clearMessages()" class="danger">🧨 Clear Chat</button>
+  </div>
+  <script type="module" src="script.js"></script>
+</body>
 </html>
