@@ -7,7 +7,7 @@ import {
   remove
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-// ⚠️ Your Firebase Config here
+// 🛠️ Replace this with your Firebase info
 const firebaseConfig = {
   apiKey: "AIzaSyAEXb38Ot27LILYnzgvAigufQqSKAtki4c",
   authDomain: "shadowman-23898.firebaseapp.com",
@@ -22,15 +22,20 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 const usernameInput = document.getElementById("username");
+const setNameBtn = document.getElementById("setNameBtn");
+const currentNameBox = document.getElementById("currentNameBox");
+const currentNameSpan = document.getElementById("currentName");
+const changeNameBtn = document.getElementById("changeNameBtn");
+
 const messageInput = document.getElementById("message");
 const messagesDiv = document.getElementById("messages");
 const roomSelector = document.getElementById("roomSelector");
 
+let username = localStorage.getItem("chat_username") || "";
 let currentRoom = roomSelector.value;
 let roomRef = ref(db, `rooms/${currentRoom}`);
 let unsubscribe = null;
 
-// ✨ Track unseen messages
 const unseenCounts = {};
 
 function updateRoomLabels() {
@@ -45,52 +50,26 @@ function updateRoomLabels() {
   }
 }
 
-// 🔄 Switch room
-roomSelector.addEventListener("change", () => {
-  currentRoom = roomSelector.value;
-  roomRef = ref(db, `rooms/${currentRoom}`);
-  unseenCounts[currentRoom] = 0;
-  updateRoomLabels();
-  loadMessages();
-});
+// 📥 Pings: check if msg includes @username or @everyone
+function checkPings(msg) {
+  if (!username) return false;
+  return (
+    msg.text.includes(`@${username}`) ||
+    msg.text.includes(`@everyone`)
+  );
+}
 
-// 💬 Send message
-window.sendMessage = () => {
-  const name = usernameInput.value.trim();
-  const text = messageInput.value.trim();
-  if (!name || !text) return;
-
-  push(roomRef, {
-    name,
-    text,
-    time: new Date().toISOString()
-  });
-  messageInput.value = "";
-};
-
-// ⌨️ Enter key sends message
-messageInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    sendMessage();
+function displayMessage(msg) {
+  const msgElem = document.createElement("div");
+  msgElem.innerHTML = `<b>${msg.name}</b>: ${msg.text}`;
+  if (checkPings(msg)) {
+    msgElem.style.background = "#ff0040";
+    msgElem.style.color = "#fff";
   }
-});
+  messagesDiv.appendChild(msgElem);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
 
-// Enable/disable message typing
-usernameInput.addEventListener("input", () => {
-  messageInput.disabled = !usernameInput.value.trim();
-});
-
-// ☢️ Clear current room
-window.clearMessages = () => {
-  if (confirm("Clear all messages in this channel?")) {
-    remove(roomRef).then(() => {
-      messagesDiv.innerHTML = "";
-    });
-  }
-};
-
-// 📡 Load messages in selected room
 function loadMessages() {
   messagesDiv.innerHTML = "";
   if (unsubscribe) unsubscribe();
@@ -101,7 +80,73 @@ function loadMessages() {
   });
 }
 
-// 🔔 Listen globally to ALL rooms
+// 👤 Set and change username
+function setupUsername() {
+  if (username) {
+    usernameInput.style.display = "none";
+    setNameBtn.style.display = "none";
+    currentNameBox.style.display = "block";
+    currentNameSpan.textContent = username;
+    messageInput.disabled = false;
+  } else {
+    messageInput.disabled = true;
+  }
+}
+
+setNameBtn.onclick = () => {
+  const name = usernameInput.value.trim();
+  if (name) {
+    username = name;
+    localStorage.setItem("chat_username", username);
+    setupUsername();
+  }
+};
+
+changeNameBtn.onclick = () => {
+  localStorage.removeItem("chat_username");
+  location.reload();
+};
+
+// 💬 Send a message
+window.sendMessage = () => {
+  const text = messageInput.value.trim();
+  if (!username || !text) return;
+
+  push(roomRef, {
+    name: username,
+    text,
+    time: new Date().toISOString()
+  });
+  messageInput.value = "";
+};
+
+// ⌨️ Enter key to send
+messageInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+// 🔄 Room switching
+roomSelector.addEventListener("change", () => {
+  currentRoom = roomSelector.value;
+  roomRef = ref(db, `rooms/${currentRoom}`);
+  unseenCounts[currentRoom] = 0;
+  updateRoomLabels();
+  loadMessages();
+});
+
+// 🧨 Clear all messages
+window.clearMessages = () => {
+  if (confirm("Clear all messages in this channel?")) {
+    remove(roomRef).then(() => {
+      messagesDiv.innerHTML = "";
+    });
+  }
+};
+
+// 🔔 Global ping listeners
 function setupRoomListeners() {
   const rooms = Array.from(roomSelector.options).map(opt => opt.value);
 
@@ -117,14 +162,7 @@ function setupRoomListeners() {
   });
 }
 
-// 📥 Display message
-function displayMessage(msg) {
-  const msgElem = document.createElement("div");
-  msgElem.innerHTML = `<b>${msg.name}</b>: ${msg.text}`;
-  messagesDiv.appendChild(msgElem);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
-}
-
 // INIT
+setupUsername();
 loadMessages();
 setupRoomListeners();
