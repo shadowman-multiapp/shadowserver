@@ -125,6 +125,33 @@ function displayMessage(msg) {
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
+function displayMessage(msg) {
+  const msgElem = document.createElement("div");
+  msgElem.innerHTML = `<b>${msg.name}</b>: ${msg.text}`;
+  messagesDiv.appendChild(msgElem);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+  const username = usernameInput.value.trim();
+
+  // 🛎 PING CHECK
+  if (msg.name !== username) {
+    const msgLower = msg.text.toLowerCase();
+    const userLower = `@${username.toLowerCase()}`;
+
+    if (msgLower.includes(userLower) || msgLower.includes("@everyone")) {
+      // Ping the current user
+      alert(`🔔 Ping from ${msg.name}:\n${msg.text}`);
+      // Optional: you could also vibrate the device or flash the tab title
+    }
+  }
+}
+
+usernameInput.addEventListener("input", () => {
+  const hasUsername = usernameInput.value.trim().length > 0;
+  messageInput.disabled = !hasUsername;
+});
+
+
 // INIT
 loadMessages();
 setupRoomListeners();
