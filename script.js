@@ -9,13 +9,13 @@ import {
 
 // ⚠️ Your Firebase Config here
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "your-project-id.firebaseapp.com",
-  databaseURL: "https://your-project-id.firebaseio.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project-id.appspot.com",
-  messagingSenderId: "000000000000",
-  appId: "1:000000000000:web:abc123def456"
+  apiKey: "AIzaSyAEXb38Ot27LILYnzgvAigufQqSKAtki4c",
+  authDomain: "shadowman-23898.firebaseapp.com",
+  projectId: "shadowman-23898",
+  storageBucket: "shadowman-23898.firebasestorage.app",
+  messagingSenderId: "325147895543",
+  appId: "1:325147895543:web:5715c8dc5000dd719795f2",
+  measurementId: "G-PE4KRDY7S6"
 };
 
 const app = initializeApp(firebaseConfig);
