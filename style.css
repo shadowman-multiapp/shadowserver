@@ -35,6 +35,7 @@ select, input, button {
   height: 200px;
   overflow-y: scroll;
   border: 1px solid red;
+  color: white;
   padding: 10px;
   margin: 10px 0;
 }
@@ -53,3 +54,4 @@ select, input, button {
     background: darkred;
     color: black;
 }
+
