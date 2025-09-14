@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAEXb38Ot27LILYnzgvAigufQqSKAtki4c",
@@ -16,33 +16,32 @@ const auth = getAuth(app);
 
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
-const loginBtn = document.getElementById("loginBtn");
+const registerBtn = document.getElementById("loginBtn"); // button text can say "Register"
 const googleBtn = document.getElementById("googleBtn");
 const status = document.getElementById("status");
 
-loginBtn.addEventListener("click", () => {
-  const email = emailInput.value;
-  const password = passwordInput.value;
+// Registration with email/password
+registerBtn.addEventListener("click", () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
 
-  signInWithEmailAndPassword(auth, email, password)
+  if (!email || !password) {
+    status.textContent = "Please enter both email and password.";
+    return;
+  }
+
+  createUserWithEmailAndPassword(auth, email, password)
     .then(userCredential => {
       localStorage.setItem("uid", userCredential.user.uid);
+      localStorage.setItem("email", userCredential.user.email);
       window.location.href = "select_username.html";
     })
-    .catch(err => {
-      if (err.code === "auth/user-not-found") {
-        createUserWithEmailAndPassword(auth, email, password)
-          .then(userCredential => {
-            localStorage.setItem("uid", userCredential.user.uid);
-            window.location.href = "select_username.html";
-          })
-          .catch(error => status.textContent = error.message);
-      } else {
-        status.textContent = err.message;
-      }
+    .catch(error => {
+      status.textContent = error.message;
     });
 });
 
+// Google OAuth registration/login
 googleBtn.addEventListener("click", () => {
   const provider = new GoogleAuthProvider();
   signInWithPopup(auth, provider)
