@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_KEY",
+  apiKey: "AIzaSyAEXb38Ot27LILYnzgvAigufQqSKAtki4c",
   authDomain: "shadowman-23898.firebaseapp.com",
   projectId: "shadowman-23898",
   storageBucket: "shadowman-23898.firebasestorage.app",
