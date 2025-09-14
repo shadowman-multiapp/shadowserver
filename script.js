@@ -4,7 +4,7 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 
 // ------------------- Firebase config -------------------
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
+  apiKey: "AIzaSyAEXb38Ot27LILYnzgvAigufQqSKAtki4c",
   authDomain: "shadowman-23898.firebaseapp.com",
   projectId: "shadowman-23898",
   storageBucket: "shadowman-23898.firebasestorage.app",
@@ -152,3 +152,4 @@ function initChat() {
   setupRoomListeners();
   messageInput.disabled = false;
 }
+
