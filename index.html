@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mini Discord</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="chat-box">
+    <h2 style="font-family: 'paint', Arial, sans-serif;">Shadowserver Test</h2>
+<select id="roomSelector">
+  <option value="shadowmain" data-room="shadowmain">#shadowmain</option>
+  <option value="laughables" data-room="laughables">#laughables</option>
+  <option value="gaming" data-room="gaming">#gaming</option>
+  <option value="shadow-arts" data-room="shadow-arts">#shadow-arts</option>
+  <option value="shadowscorner" data-room="shadowscorner">#shadowscorner</option>
+  <option value="talktoadmins" data-room="talktoadmins">#talktoadmins</option>
+</select>
+    <div id="messages" class="messages"></div>
+    <input id="username" placeholder="Your name..." />
+    <input id="message" placeholder="Type a message..." disabled />
+    <button onclick="sendMessage()" class="send" style="cursor: pointer;">Send</button>
+    <button id="clearBtn" onclick="clearMessages()" class="danger" style="display:none;">🧨 Clear Chat</button>
+  </div>
+  <script type="module" src="script.js"></script>
+</body>
+
+</html>
