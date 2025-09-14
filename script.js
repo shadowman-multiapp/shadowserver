@@ -8,7 +8,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 window.addEventListener("DOMContentLoaded", () => {
-  const testerUsers = ["ForeverGray_:D", "ForeverSkye_:D", "Rebecca!🐾🦴"];
+  const testerUsers = ["ForeverGray_:D", "Avery"];
 
   // 🚨 REPLACE WITH YOUR FIREBASE CONFIG!
   const firebaseConfig = {
@@ -30,10 +30,22 @@ window.addEventListener("DOMContentLoaded", () => {
   const roomSelector = document.getElementById("roomSelector");
   const clearBtn = document.getElementById("clearBtn");
 
-  let currentRoom = roomSelector.value;
+  // Default rooms
+  const rooms = ["shadowmain", "laughables", "gaming", "shadow-arts", "shadowscorner", "talktoadmins"];
+  let currentRoom = "shadowmain";
   let roomRef = ref(db, `rooms/${currentRoom}`);
   let unsubscribe = null;
   const unseenCounts = {};
+
+  // Populate selector dynamically (optional)
+  roomSelector.innerHTML = "";
+  rooms.forEach(room => {
+    const opt = document.createElement("option");
+    opt.value = room;
+    opt.textContent = `#${room}`;
+    roomSelector.appendChild(opt);
+  });
+  roomSelector.value = currentRoom;
 
   // Load saved username
   const savedName = localStorage.getItem("savedUsername");
@@ -47,11 +59,7 @@ window.addEventListener("DOMContentLoaded", () => {
     for (const option of roomSelector.options) {
       const room = option.value;
       const count = unseenCounts[room] || 0;
-      if (room === currentRoom || count === 0) {
-        option.textContent = `#${room}`;
-      } else {
-        option.textContent = `#${room} (${count})`;
-      }
+      option.textContent = (room === currentRoom || count === 0) ? `#${room}` : `#${room} (${count})`;
     }
   }
 
@@ -79,7 +87,7 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   // Enter key sends message
-  messageInput.addEventListener("keydown", (e) => {
+  messageInput.addEventListener("keydown", e => {
     if (e.key === "Enter") {
       e.preventDefault();
       sendMessage();
@@ -145,7 +153,7 @@ window.addEventListener("DOMContentLoaded", () => {
     messagesDiv.innerHTML = "";
     if (unsubscribe) unsubscribe();
 
-    unsubscribe = onChildAdded(roomRef, (data) => {
+    unsubscribe = onChildAdded(roomRef, data => {
       const msg = data.val();
       displayMessage(msg);
     });
@@ -153,11 +161,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // Listen to all rooms for unseen counts
   function setupRoomListeners() {
-    const rooms = Array.from(roomSelector.options).map(opt => opt.value);
-
     rooms.forEach(room => {
       const refRoom = ref(db, `rooms/${room}`);
-      onChildAdded(refRoom, (data) => {
+      onChildAdded(refRoom, data => {
         const msg = data.val();
         if (room !== currentRoom) {
           unseenCounts[room] = (unseenCounts[room] || 0) + 1;
