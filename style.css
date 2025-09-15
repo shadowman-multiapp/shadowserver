@@ -1,14 +1,16 @@
-/* Root variables for easy theming */
+/* === Theme Variables === */
 :root {
-  --bg-gradient-start: #330000;
-  --bg-gradient-end: #000000;
-  --primary-red: #e60000;
-  --secondary-red: #4c0000;
-  --accent-red: #ff1a1a;
-  --font-main: 'paint', sans-serif;
-  --transition-speed: 0.3s;
+  --bg-dark: #0a0000;
+  --bg-mid: #1c0000;
+  --accent: #ff1a1a;
+  --text: #ff4d4d;
+  --input-bg: #2a0000;
+  --border-radius: 8px;
+  --font-main: sans-serif;
+  --font-title: 'paint', Arial, sans-serif;
 }
 
+/* === Font Face === */
 @font-face {
   font-family: 'paint';
   src: url('paint.woff2') format('woff2'),
@@ -18,214 +20,133 @@
   font-display: swap;
 }
 
+/* === Reset & Base === */
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
+  background: linear-gradient(to bottom, #4c0000, black);
+  color: var(--text);
   font-family: var(--font-main);
-  background: linear-gradient(to bottom, var(--secondary-red), var(--bg-gradient-end));
-  color: var(--primary-red);
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  overflow: hidden;
-  text-shadow: 0 0 4px var(--primary-red);
 }
 
+/* === Chat Container === */
 .chat-box {
-  background: var(--bg-gradient-end);
-  border: 1px solid var(--primary-red);
-  border-radius: 8px;
-  box-shadow: 0 0 20px var(--primary-red);
-  width: 360px;
-  padding: 24px;
+  width: 380px;
+  background: var(--bg-mid);
+  border: 2px solid var(--accent);
+  border-radius: var(--border-radius);
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
-  transition: box-shadow var(--transition-speed);
+  overflow: hidden;
 }
 
-.chat-box:hover {
-  box-shadow: 0 0 30px var(--accent-red);
+/* === Header === */
+.chat-box h2 {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  text-align: center;
+  padding: 16px;
+  background: var(--bg-dark);
+  color: var(--accent);
+  border-bottom: 2px solid var(--accent);
+  letter-spacing: 1px;
 }
 
-.chat-box header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.chat-box header .title {
-  font-size: 1.6rem;
-}
-
-.chat-box header .create-btn {
-  background: none;
-  border: 1px solid var(--primary-red);
-  padding: 6px 12px;
-  border-radius: 4px;
-  color: var(--primary-red);
-  cursor: pointer;
-  transition: background var(--transition-speed), box-shadow var(--transition-speed);
-}
-
-.chat-box header .create-btn:hover {
-  background: var(--secondary-red);
-  box-shadow: 0 0 8px var(--primary-red);
-}
-
-.chat-box .search {
-  position: relative;
-  margin-bottom: 16px;
-}
-
-.chat-box .search input {
+/* === Room Selector === */
+select {
   width: 100%;
-  padding: 8px 12px;
-  border: 1px solid var(--primary-red);
-  border-radius: 4px;
-  background: var(--bg-gradient-end);
-  color: var(--primary-red);
-  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+  padding: 10px;
+  background: var(--input-bg);
+  color: var(--text);
+  border: 1px solid var(--accent);
+  border-radius: var(--border-radius);
+  margin: 10px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
 }
 
-.chat-box .search input:focus {
+select:focus {
   outline: none;
-  border-color: var(--accent-red);
-  box-shadow: 0 0 6px var(--accent-red);
+  border-color: #fff;
 }
 
+/* === Messages Area === */
 .messages {
   flex: 1;
-  background: var(--bg-gradient-end);
-  border: 1px solid var(--primary-red);
-  border-radius: 4px;
   padding: 12px;
+  margin: 0 10px;
+  background: var(--input-bg);
+  border-radius: var(--border-radius);
   overflow-y: auto;
-  box-shadow: inset 0 0 8px var(--primary-red);
-  margin-bottom: 16px;
+  border: 1px solid var(--accent);
 }
 
+.messages p {
+  background: rgba(255, 26, 26, 0.1);
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* === Custom Scrollbar === */
 .messages::-webkit-scrollbar {
   width: 6px;
 }
 
-.messages::-webkit-scrollbar-track {
-  background: var(--secondary-red);
-}
-
 .messages::-webkit-scrollbar-thumb {
-  background: var(--primary-red);
+  background: var(--accent);
   border-radius: 3px;
 }
 
-input, select, button {
-  font-family: var(--font-main);
-  color: var(--primary-red);
-  background: var(--bg-gradient-end);
-  border: 1px solid var(--primary-red);
-  border-radius: 4px;
-  padding: 8px 10px;
-  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+/* === Input & Buttons === */
+input, button {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 10px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--accent);
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: background 0.2s, border-color 0.2s;
 }
 
-input::placeholder {
-  color: var(--secondary-red);
-}
-
-input:focus,
-select:focus {
+input:focus, button:focus {
   outline: none;
-  border-color: var(--accent-red);
-  box-shadow: 0 0 6px var(--accent-red);
+  border-color: #fff;
 }
 
-button {
+/* === Send Button === */
+.send {
+  background: var(--accent);
+  color: black;
+  font-weight: bold;
   cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-top: 8px;
 }
 
-button.send {
-  background: var(--primary-red);
-  color: var(--bg-gradient-end);
-  border: none;
-  box-shadow: 0 0 6px var(--primary-red);
+.send:hover {
+  background: #ff4d4d;
 }
 
-button.send:hover {
-  background: var(--accent-red);
-  color: #fff;
-  box-shadow: 0 0 10px var(--accent-red);
-}
-
-button.danger {
-  background: var(--bg-gradient-end);
-  color: var(--primary-red);
-}
-
-button.danger:hover {
-  background: var(--secondary-red);
-  box-shadow: 0 0 6px var(--secondary-red);
-}
-
-.content-placeholder {
-  background: transparent;
-  border: 1px dashed var(--primary-red);
-  border-radius: 4px;
-  height: 100px;
-  margin-bottom: 12px;
-  position: relative;
-  overflow: hidden;
-  transition: border-color var(--transition-speed);
-}
-
-.content-placeholder:hover {
-  border-color: var(--accent-red);
-}
-
-.content-placeholder::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  pointer-events: none;
-  box-shadow: 0 0 20px var(--primary-red);
-  opacity: 0;
-  animation: glow-flicker 3s infinite;
-}
-
-@keyframes glow-flicker {
-  0%, 100% { opacity: 0; }
-  10%, 30% { opacity: 0.3; }
-  50% { opacity: 0.6; }
-  70% { opacity: 0.2; }
-  90% { opacity: 0.4; }
-}
-
-.nav {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 16px;
-}
-
-.nav-item {
-  flex: 1;
-  text-align: center;
-  padding: 10px 0;
-  color: var(--primary-red);
+/* === Danger Button === */
+.danger {
+  background: black;
+  color: var(--accent);
   cursor: pointer;
-  transition: color var(--transition-speed), text-shadow var(--transition-speed);
 }
 
-.nav-item:hover {
-  color: var(--accent-red);
-  text-shadow: 0 0 6px var(--accent-red);
+.danger:hover {
+  background: var(--accent);
+  color: black;
 }
