@@ -90,6 +90,28 @@ select:focus {
   border-color: #fff;
 }
 
+/* === Link === */
+a {
+  font-family: var(--font-title);
+  color: var(--accent);
+  text-decoration: none;
+  padding: 6px 12px;
+  border: 1px solid var(--accent);
+  border-radius: var(--border-radius);
+  background: var(--bg-dark);
+  transition: all 0.3s ease;
+  display: inline-block;
+  margin: 6px 0;
+  box-shadow: 0 0 6px rgba(255, 0, 0, 0.3);
+}
+
+a:hover {
+  background: var(--accent);
+  color: black;
+  box-shadow: 0 0 12px rgba(255, 0, 0, 0.6);
+  transform: scale(1.05);
+}
+
 /* === Messages Area === */
 .messages {
   flex: 1;
@@ -161,5 +183,6 @@ input:focus, button:focus {
   background: var(--accent);
   color: black;
 }
+
 
 
