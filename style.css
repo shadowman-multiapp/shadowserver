@@ -6,8 +6,8 @@
   --text: #ff4d4d;
   --input-bg: #2a0000;
   --border-radius: 8px;
-  --font-main: sans-serif;
-  --font-title: 'paint', Arial, sans-serif;
+  --font-main: serif;
+  --font-title: 'Shadowman Letters', 'paint', Arial, sans-serif;
 }
 
 /* === Font Face === */
@@ -18,6 +18,15 @@
   font-weight: 500;
   font-style: normal;
   font-display: swap;
+}
+
+@font-face {
+    font-family: 'Shadowman Letters';
+    src: url('Shadowman_letters-Regular.woff2') format('woff2'),
+        url('Shadowman_letters-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 
 /* === Reset & Base === */
@@ -152,4 +161,5 @@ input:focus, button:focus {
   background: var(--accent);
   color: black;
 }
+
 
