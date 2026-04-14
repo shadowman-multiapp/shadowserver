@@ -12,13 +12,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // 🚨 REPLACE WITH YOUR FIREBASE CONFIG!
   const firebaseConfig = {
-    apiKey: "AIzaSyAEXb38Ot27LILYnzgvAigufQqSKAtki4c",
+    apiKey: "AIzaSyB2i8r36HXy6aUfI290pSR8XneLOad9uj8",
     authDomain: "shadowman-23898.firebaseapp.com",
     projectId: "shadowman-23898",
     storageBucket: "shadowman-23898.firebasestorage.app",
     messagingSenderId: "325147895543",
-    appId: "1:325147895543:web:5715c8dc5000dd719795f2",
-    measurementId: "G-PE4KRDY7S6"
+    appId: "1:325147895543:web:d41242cabcd38b239795f2",
+    measurementId: "G-MXBQ75YPC0"
   };
 
   const app = initializeApp(firebaseConfig);
