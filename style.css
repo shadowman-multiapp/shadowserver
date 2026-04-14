@@ -21,6 +21,15 @@
 }
 
 @font-face {
+    font-family: 'Inter';
+    src: url('Inter-Regular.woff2') format('woff2'),
+        url('Inter-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
     font-family: 'Shadowman Letters';
     src: url('Shadowman_letters-Regular.woff2') format('woff2'),
         url('Shadowman_letters-Regular.woff') format('woff');
@@ -44,6 +53,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  font-family: "Inter", Arial, sans-serif;
 }
 
 /* === Chat Container === */
