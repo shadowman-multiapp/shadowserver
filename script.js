@@ -4,11 +4,13 @@ import {
   ref,
   push,
   onChildAdded,
+  onValue,
+  set,
   remove
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 window.addEventListener("DOMContentLoaded", () => {
-  const testerUsers = ["ForeverGray_:D", "Avery"];
+  const testerUsers = ["ForeverGray_:D", "zune", "Zune"];
 
   const firebaseConfig = {
     apiKey: "AIzaSyB2i8r36HXy6aUfI290pSR8XneLOad9uj8",
@@ -28,19 +30,21 @@ window.addEventListener("DOMContentLoaded", () => {
   const messagesDiv = document.getElementById("messages");
   const roomSelector = document.getElementById("roomSelector");
   const clearBtn = document.getElementById("clearBtn");
+  const typingIndicator = document.getElementById("typingIndicator");
 
   const rooms = ["shadowmain", "laughables", "gaming", "shadow-arts", "shadowscorner", "talktoadmins"];
 
   let currentRoom = "shadowmain";
   let roomRef = ref(db, `rooms/${currentRoom}`);
+  let typingRef = ref(db, `rooms/${currentRoom}/typing`);
   let unsubscribe = null;
 
   const unseenCounts = {};
   let notificationEnabled = false;
   let isInitialLoad = true;
+  let typingTimeout = null;
 
   // -----------------------------
-  // HTML escape
   function escapeHTML(str) {
     return str
       .replaceAll("&", "&amp;")
@@ -48,8 +52,6 @@ window.addEventListener("DOMContentLoaded", () => {
       .replaceAll(">", "&gt;");
   }
 
-  // -----------------------------
-  // Markdown parser
   function parseMarkdown(text) {
     let safe = escapeHTML(text);
 
@@ -60,14 +62,11 @@ window.addEventListener("DOMContentLoaded", () => {
     return safe;
   }
 
-  // -----------------------------
-  // Time formatting
   function formatTime(iso) {
     return new Date(iso).toTimeString().split(" ")[0];
   }
 
   // -----------------------------
-  // Notifications
   function setupNotifications() {
     if (!("Notification" in window)) return;
 
@@ -87,7 +86,6 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   // -----------------------------
-  // Room setup
   roomSelector.innerHTML = "";
   rooms.forEach(room => {
     const opt = document.createElement("option");
@@ -110,18 +108,20 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // -----------------------------
   roomSelector.addEventListener("change", () => {
     currentRoom = roomSelector.value;
     roomRef = ref(db, `rooms/${currentRoom}`);
+    typingRef = ref(db, `rooms/${currentRoom}/typing`);
 
     unseenCounts[currentRoom] = 0;
     updateRoomLabels();
 
     loadMessages();
+    listenTyping();
   });
 
   // -----------------------------
-  // Send message
   window.sendMessage = () => {
     const name = usernameInput.value.trim();
     const text = messageInput.value.trim();
@@ -134,6 +134,9 @@ window.addEventListener("DOMContentLoaded", () => {
       time: new Date().toISOString()
     });
 
+    // stop typing when message sent
+    remove(ref(db, `rooms/${currentRoom}/typing/${name}`));
+
     messageInput.value = "";
   };
 
@@ -145,7 +148,42 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   // -----------------------------
-  // Login / PIN
+  // TYPING SYSTEM
+  function sendTyping() {
+    const name = usernameInput.value.trim();
+    if (!name) return;
+
+    const userRef = ref(db, `rooms/${currentRoom}/typing/${name}`);
+
+    set(userRef, true);
+
+    if (typingTimeout) clearTimeout(typingTimeout);
+
+    typingTimeout = setTimeout(() => {
+      remove(userRef);
+    }, 5000);
+  }
+
+  messageInput.addEventListener("input", sendTyping);
+
+  function listenTyping() {
+    onValue(typingRef, snapshot => {
+      const data = snapshot.val() || {};
+
+      const users = Object.keys(data)
+        .filter(name => name !== usernameInput.value.trim());
+
+      if (users.length === 0) {
+        typingIndicator.textContent = "";
+      } else if (users.length === 1) {
+        typingIndicator.textContent = `${users[0]} is typing...`;
+      } else {
+        typingIndicator.textContent = `${users.join(", ")} are typing...`;
+      }
+    });
+  }
+
+  // -----------------------------
   usernameInput.addEventListener("input", () => {
     const name = usernameInput.value.trim();
     localStorage.setItem("savedUsername", name);
@@ -173,7 +211,6 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   // -----------------------------
-  // Clear chat
   window.clearMessages = () => {
     if (confirm("Clear all messages in this channel?")) {
       remove(roomRef);
@@ -182,7 +219,6 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   // -----------------------------
-  // Display message
   function displayMessage(msg) {
     const msgElem = document.createElement("div");
 
@@ -210,7 +246,6 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   // -----------------------------
-  // Load messages (FIXED NOTIFICATIONS)
   function loadMessages() {
     messagesDiv.innerHTML = "";
 
@@ -221,7 +256,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
       displayMessage(msg);
 
-      // 🔥 KEY FIX: no notifications during initial load
       if (!isInitialLoad) {
         notify(msg);
       }
@@ -232,12 +266,10 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // finish initial load phase
     isInitialLoad = false;
   }
 
   // -----------------------------
-  // Room listeners
   function setupRoomListeners() {
     rooms.forEach(room => {
       const r = ref(db, `rooms/${room}`);
@@ -252,8 +284,8 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   // -----------------------------
-  // INIT
   setupNotifications();
   loadMessages();
   setupRoomListeners();
+  listenTyping();
 });
